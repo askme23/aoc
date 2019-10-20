@@ -55,7 +55,7 @@ fn get_wire_signal(wire: &str, map: &mut HashMap<String, String>) -> u16 {
 			_ => 0,
 		};
 		map.entry(String::from(wire)).and_modify(|e| *e = value.to_string());
-		return value;
+		return value
 	}
 
 	0
