@@ -4,14 +4,6 @@ use std::io::{self, prelude::*, BufReader};
 use std::str::FromStr;
 use std::iter::FromIterator;
 
-fn f(n: i16) -> i16 {
-	if n < 2 {
-		1
-	} else {
-		n * f(n-1)
-	}
-}
-
 pub fn parsing_file() -> io::Result<()> {
 	let file_name = "../test_day_9.txt";
 	let file = File::open(file_name)?;
@@ -21,13 +13,12 @@ pub fn parsing_file() -> io::Result<()> {
 	let mut matrix: Vec<Vec<i16>> = vec![vec![0]];
 	let mut cnt: i16 = 0;
 	let mut current_city: String = "".to_string();
-	let mut optimal_way: String = "".to_string();
+	let mut optimal_way: i16 = std::i16::MIN;
 
 	for line in reader.lines() {
 		match re.captures(&line.unwrap()) {
 			Some(caps) => {
 				let from = caps.get(1).unwrap().as_str();
-				// let to = caps.get(2).unwrap().as_str();
 				let weight = i16::from_str(&caps[3]).unwrap();
 
 				if current_city == "".to_string() {
@@ -68,7 +59,6 @@ pub fn parsing_file() -> io::Result<()> {
 	}
 
 	let mut combinations: Vec<Vec<i16>> = vec![Vec::from_iter(arr[..].iter().cloned())];
-	println!("{:?}", arr);
 	loop {
 		let mut i: i16 = -1;
 		for index in 0..arr.len()-1 {
@@ -100,7 +90,25 @@ pub fn parsing_file() -> io::Result<()> {
 		combinations.push(Vec::from_iter(arr[..].iter().cloned()));
 	}
 
-	//доделать завтра алгоритм перебора для задачи о коммивояжерах
-	println!("{:?}", combinations);
+	// println!("{:?}", combinations);
+
+	for val in combinations {
+		let mut temp_way = 0;
+		let mut i = val[0];
+		
+		for j in val[1..].into_iter() {
+			// println!("i: {}, j: {}", i, *j);
+			// println!("element: {}", matrix[i as usize][*j as usize]);
+			temp_way += matrix[i as usize][*j as usize];
+			i = *j
+		}
+
+		if temp_way > optimal_way {
+			optimal_way = temp_way;
+		}
+	}
+
+	println!("{}", optimal_way);
+
 	Ok(())
 }
