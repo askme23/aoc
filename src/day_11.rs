@@ -43,8 +43,8 @@ fn increment_password(password: String) -> String {
 }
 
 pub fn run() {
+	let new_password;
 	let mut password = "cqjxxyzz".to_string();
-	let mut new_password = String::new();
 	let re = Regex::new(r"(\w)\1.*(\w)\2").unwrap();
 	
 	loop {

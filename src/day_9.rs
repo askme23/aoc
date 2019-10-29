@@ -4,16 +4,15 @@ use std::io::{self, prelude::*, BufReader};
 use std::str::FromStr;
 use std::iter::FromIterator;
 
-pub fn parsing_file() -> io::Result<()> {
+fn parsing_file() -> io::Result<Vec<Vec<i16>>> {
 	let file_name = "../test_day_9.txt";
 	let file = File::open(file_name)?;
 	let reader = BufReader::new(file);
 
 	let re = Regex::new(r"(\w+)\sto\s(\w+)\s=\s(\d+)").unwrap();
 	let mut matrix: Vec<Vec<i16>> = vec![vec![0]];
-	let mut cnt: i16 = 0;
 	let mut current_city: String = "".to_string();
-	let mut optimal_way: i16 = std::i16::MIN;
+	let mut cnt: i16 = 0;
 
 	for line in reader.lines() {
 		match re.captures(&line.unwrap()) {
@@ -45,7 +44,21 @@ pub fn parsing_file() -> io::Result<()> {
 		}
 	}
 
+	Ok(matrix)
+}
+
+pub fn run(mat: io::Result<Vec<Vec<i16>>>) {
+	let mut optimal_way: i16 = std::i16::MIN;
 	let mut temp_vec: Vec<i16> = Vec::new();
+	let mut matrix: Vec<Vec<i16>>;
+
+	if let Ok(ma) = mat {
+		matrix = ma;
+	} else {
+		panic!("Something gone wrong");
+	}
+
+	// println!("{:?}", matrix);
 	let len = matrix[0].len() as i16;
 	for i in &matrix {
 		temp_vec.push(i[(len-1) as usize]);
@@ -91,7 +104,6 @@ pub fn parsing_file() -> io::Result<()> {
 	}
 
 	// println!("{:?}", combinations);
-
 	for val in combinations {
 		let mut temp_way = 0;
 		let mut i = val[0];
@@ -103,12 +115,12 @@ pub fn parsing_file() -> io::Result<()> {
 			i = *j
 		}
 
+		temp_way += matrix[i as usize][val[0] as usize];
+		
 		if temp_way > optimal_way {
 			optimal_way = temp_way;
 		}
 	}
 
 	println!("{}", optimal_way);
-
-	Ok(())
 }
