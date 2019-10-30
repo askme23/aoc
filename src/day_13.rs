@@ -54,6 +54,7 @@ pub fn parsing_file() -> io::Result<Vec<Vec<i16>>> {
 		}
 	}
 
+	// part 2
 	for i in 0..matrix.len() {
 		matrix[i].push(0);
 	}
