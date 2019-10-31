@@ -7,8 +7,9 @@ extern crate aoc;
 // use aoc::day_11;
 // use aoc::day_12;
 // use aoc::day_13;
-use aoc::day_14;
+// use aoc::day_14;
+use aoc::day_15;
 
 fn main() {
-	day_14::run();
+	day_15::run();
 }
